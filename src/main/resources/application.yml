@@ -47,3 +47,9 @@ token:
 
 server:
   port: ${APPLICATION_PORT}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

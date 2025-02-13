@@ -7,4 +7,6 @@ public interface UserService {
   User createUser(User user);
 
   User loadUserByUsername(String username);
+
+  boolean isUserExist(String username);
 }
