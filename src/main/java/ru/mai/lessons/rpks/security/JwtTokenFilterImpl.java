@@ -8,8 +8,12 @@ import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.mai.lessons.rpks.exception.ParseTokenException;
+import ru.mai.lessons.rpks.utils.SecurityContextUtils;
+import ru.mai.lessons.rpks.utils.TokenUtils;
 
 @Slf4j
 @Component
@@ -18,7 +22,7 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
 
   private static final String TOKEN_HEADER = "Authorization";
 
-  //TODO inject JwtVerifierService...
+  private final JwtVerifierService jwtVerifierService;
 
   @Override
   protected void doFilterInternal(
@@ -26,16 +30,40 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-    //TODO - if requestUri startsWith, then skip...
+    String authHeader = getHeader(request);
 
-    //TODO extract token...
+    String token = null;
+    try{
+      token = TokenUtils.extractToken(authHeader);
+    } catch(ParseTokenException e) {
+      log.warn("error with extraction token: {}", e.getMessage());
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
 
-    //TODO verify token...
+    if (token == null || !jwtVerifierService.verify(token)) {
+      log.warn("токен пустой или битый");
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      log.info("Возвращаем статус 401 для запроса: {}", request.getRequestURI());
+      return;
+    }
 
-    //TODO if not verify, then set status response SC_UNAUTHORIZED...
+    String username = TokenUtils.getSubject(token);
+    log.info("Извлечённый username из токена: {}", username);
+
+    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+      TokenAuthentication tokenAuthentication = new TokenAuthentication(username);
+      SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
+      log.info("Аутентификация установлена для пользователя: {}", username);
+    } else {
+      log.warn("Субъект (username) из токена равен null");
+    }
+
+
+    filterChain.doFilter(request, response);
   }
 
-  private String getToken(HttpServletRequest request) {
+  private String getHeader(HttpServletRequest request) {
     return request.getHeader(TOKEN_HEADER);
   }
 }

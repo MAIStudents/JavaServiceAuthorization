@@ -1,6 +1,13 @@
 package ru.mai.lessons.rpks.clients;
 
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.mai.lessons.rpks.dto.request.FilterRequest;
+import ru.mai.lessons.rpks.dto.response.FilterResponse;
 
 /**
  * Клиент для контролера фильтрации
@@ -10,5 +17,21 @@ import org.springframework.cloud.openfeign.FeignClient;
     url = "${feign.client.url.filter}"
 )
 public interface FilterClient {
-  //TODO code here...
+    @GetMapping("/findAll")
+    Iterable<FilterResponse> getAllFilters();
+
+    @GetMapping("/findAll/{id}")
+    Iterable<FilterResponse> getAllFiltersByFilterId(@PathVariable long id);
+
+    @GetMapping("/find/{filterId}/{ruleId}")
+    FilterResponse getFilterByFilterIdAndRuleId(@PathVariable long filterId, @PathVariable long ruleId);
+
+    @DeleteMapping("/delete")
+    void deleteFilter();
+
+    @DeleteMapping("/delete/{filterId}/{ruleId}")
+    public void deleteFilterById(@PathVariable long filterId, @PathVariable long ruleId);
+
+    @PostMapping("/save")
+    ResponseEntity<FilterResponse> save(@RequestBody FilterRequest filter);
 }

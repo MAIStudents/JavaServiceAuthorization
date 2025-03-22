@@ -18,6 +18,7 @@ public class RedisCacheConfig {
 
   @Bean
   public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+
     RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
         .entryTtl(Duration.ofMinutes(10))
         .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))

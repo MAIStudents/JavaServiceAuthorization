@@ -48,4 +48,5 @@ public class TokenAuthentication implements Authentication {
   public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
     this.authenticated = isAuthenticated;
   }
+
 }
