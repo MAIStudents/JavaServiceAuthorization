@@ -11,6 +11,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -21,15 +22,19 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+import ru.mai.lessons.rpks.clients.DeduplicationClient;
 import ru.mai.lessons.rpks.models.User;
 import ru.mai.lessons.rpks.repositories.UserRepository;
 import ru.mai.lessons.rpks.services.UserService;
+
+import java.util.Collections;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -63,10 +68,15 @@ public class JavaServiceBffTest {
   @Autowired
   private CacheManager cacheManager;
 
+  @MockitoBean
+  private DeduplicationClient deduplicationClient;
+
+
   @BeforeEach
   public void setup() {
     RestAssured.port = port;
     userRepository.deleteAll();
+    Mockito.when(deduplicationClient.getAllDeduplications()).thenReturn(Collections.emptyList());
   }
 
   @Container
