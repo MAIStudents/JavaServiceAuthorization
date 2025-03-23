@@ -15,11 +15,11 @@ spring:
       max-lifetime: 2000000
       pool-name: SpringBootJPAHikariCP
   liquibase:
-    drop-first: true
+    #drop-first: true
     liquibase-schema: public
     default-schema: public
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: true #enable here
+    enabled: false #enable here
   jpa:
     show-sql: true
     properties:
