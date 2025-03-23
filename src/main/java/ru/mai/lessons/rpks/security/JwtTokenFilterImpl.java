@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.mai.lessons.rpks.exception.ParseTokenException;
-import ru.mai.lessons.rpks.utils.SecurityContextUtils;
 import ru.mai.lessons.rpks.utils.TokenUtils;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
 
     String authHeader = getHeader(request);
 
-    String token = null;
+    String token;
     try{
       token = TokenUtils.extractToken(authHeader);
     } catch(ParseTokenException e) {
@@ -41,10 +40,15 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
       return;
     }
 
-    if (token == null || !jwtVerifierService.verify(token)) {
-      log.warn("токен пустой или битый");
+    if (token == null) {
+      log.warn("токен пустой");
+      filterChain.doFilter(request, response);
+      return;
+    }
+
+    if (!jwtVerifierService.verify(token)) {
+      log.warn("токен битый");
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      log.info("Возвращаем статус 401 для запроса: {}", request.getRequestURI());
       return;
     }
 

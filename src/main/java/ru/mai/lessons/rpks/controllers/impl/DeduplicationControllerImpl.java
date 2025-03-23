@@ -1,7 +1,6 @@
 package ru.mai.lessons.rpks.controllers.impl;
 
 import jakarta.validation.Valid;
-import java.util.Collections;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

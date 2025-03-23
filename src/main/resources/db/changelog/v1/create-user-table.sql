@@ -1,4 +1,4 @@
-create table "user" (
-    id BigSerial primary key,
-    username varchar not null unique
+CREATE TABLE IF NOT EXISTS "user" (
+                                      id BIGSERIAL PRIMARY KEY,
+                                      username VARCHAR NOT NULL UNIQUE
 );

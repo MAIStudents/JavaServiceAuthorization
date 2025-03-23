@@ -16,7 +16,7 @@ public class TokenAuthentication implements Authentication {
 
   @Override
   public String getName() {
-    return username;
+    return username + "-" + System.currentTimeMillis();
   }
 
   @Override

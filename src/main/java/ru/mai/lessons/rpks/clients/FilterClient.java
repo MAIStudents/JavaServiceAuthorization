@@ -1,9 +1,7 @@
 package ru.mai.lessons.rpks.clients;
 
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mai.lessons.rpks.dto.request.FilterRequest;
@@ -30,7 +28,7 @@ public interface FilterClient {
     void deleteFilter();
 
     @DeleteMapping("/delete/{filterId}/{ruleId}")
-    public void deleteFilterById(@PathVariable long filterId, @PathVariable long ruleId);
+    void deleteFilterById(@PathVariable long filterId, @PathVariable long ruleId);
 
     @PostMapping("/save")
     ResponseEntity<FilterResponse> save(@RequestBody FilterRequest filter);

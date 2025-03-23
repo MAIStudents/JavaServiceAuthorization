@@ -1,9 +1,8 @@
 package ru.mai.lessons.rpks.clients;
 
-import io.swagger.v3.oas.annotations.Operation;
+
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mai.lessons.rpks.dto.request.EnrichmentRequest;
