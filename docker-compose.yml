@@ -2,19 +2,19 @@ version: '3.8'
 
 services:
 
-#  postgres-app-bff:
-#    image: postgres:15
-#    container_name: postgres-app-bff
-#    environment:
-#      POSTGRES_DB: postgres
-#      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD: postgres
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - postgres_data_a:/var/lib/postgresql/data
-#    networks:
-#      - app-network
+  postgres-app-bff:
+    image: postgres:15
+    container_name: postgres-app-bff
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_a:/var/lib/postgresql/data
+    networks:
+      - app-network
 
 
   postgres-app-management:
@@ -32,13 +32,13 @@ services:
       - app-network
 
 
-#  redis-bff:
-#    image: redis:latest
-#    container_name: redis-bff
-#    ports:
-#      - "6379:6379"
-#    networks:
-#      - app-network
+  redis-bff:
+    image: redis:latest
+    container_name: redis-bff
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
 
 
   app-management:

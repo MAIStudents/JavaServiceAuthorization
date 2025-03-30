@@ -55,7 +55,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,metrics,prometheus,info
   endpoint:
+    prometheus:
+      access: read_only
     health:
       show-details: always
