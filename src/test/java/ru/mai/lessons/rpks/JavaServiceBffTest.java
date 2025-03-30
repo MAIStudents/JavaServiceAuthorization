@@ -155,6 +155,7 @@ public class JavaServiceBffTest {
   @DisplayName("Тест на успешную верификацию токена")
   void givenToken_whenVerify_thenReturnTrue() {
     String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBbGV4YW5kciIsImlzcyI6InN0dWRlbnQiLCJleHAiOjMxNTU2ODg5ODY0NDAzMTk5LCJpYXQiOjE3MzcyMzUyMDR9.nwaIS1ck9ylb7YryV33HVflm0sGOGGqpvufj-dHoO7s";
+    userRepository.saveAndFlush(User.builder().username("Alexandr").build());
     assertTrue(jwtVerifierService.verify(token));
   }
 
