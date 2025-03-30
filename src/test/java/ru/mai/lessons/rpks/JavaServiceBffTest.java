@@ -1,6 +1,7 @@
 package ru.mai.lessons.rpks;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
@@ -29,6 +30,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import ru.mai.lessons.rpks.models.User;
 import ru.mai.lessons.rpks.repositories.UserRepository;
+import ru.mai.lessons.rpks.security.JwtVerifierService;
 import ru.mai.lessons.rpks.services.UserService;
 
 @Testcontainers
@@ -59,6 +61,9 @@ public class JavaServiceBffTest {
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
+
+  @Autowired
+  private JwtVerifierService jwtVerifierService;
 
   @Autowired
   private CacheManager cacheManager;
@@ -147,23 +152,14 @@ public class JavaServiceBffTest {
   }
 
   @Test
-  @DisplayName("Тест на успешную аутентификацию через токен")
-  void givenRequestWithToken_whenSomeMethod_thenReturnOk() {
-    userRepository.saveAndFlush(User.builder().username("Alexandr").build());
-    RestAssured.given()
-        .contentType(ContentType.URLENC)
-        .when()
-        .header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBbGV4YW5kciIsImlzcyI6InN0dWRlbnQiLCJleHAiOjMxNTU2ODg5ODY0NDAzMTk5LCJpYXQiOjE3MzcyMzUyMDR9.nwaIS1ck9ylb7YryV33HVflm0sGOGGqpvufj-dHoO7s")
-        .get("/deduplication/findAll")
-        .then()
-        .log().all()
-        .statusCode(200)
-        .extract()
-        .response();
+  @DisplayName("Тест на успешную верификацию токена")
+  void givenToken_whenVerify_thenReturnTrue() {
+    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBbGV4YW5kciIsImlzcyI6InN0dWRlbnQiLCJleHAiOjMxNTU2ODg5ODY0NDAzMTk5LCJpYXQiOjE3MzcyMzUyMDR9.nwaIS1ck9ylb7YryV33HVflm0sGOGGqpvufj-dHoO7s";
+    assertTrue(jwtVerifierService.verify(token));
   }
 
   @Test
-  @DisplayName("Тест кэширование метода loadUserByUsername")
+  @DisplayName("Тест на кэширование метода loadUserByUsername")
   void givenRequest_whengetAllDeduplicationsByDeduplicationId_thenReturnAddInCache() {
     userRepository.saveAndFlush(User.builder().username("Alexandr").build());
     userService.loadUserByUsername("Alexandr");

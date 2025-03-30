@@ -13,7 +13,6 @@ import ru.mai.lessons.rpks.dto.response.TokenResponse;
 @RequiredArgsConstructor
 public class RegisterControllerImpl implements RegisterController {
 
-
   //TODO inject RegisterService...
 
   @Override
