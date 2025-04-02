@@ -10,6 +10,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.mai.lessons.rpks.models.User;
 import ru.mai.lessons.rpks.services.UserService;
@@ -55,13 +56,15 @@ public class JwtVerifierService {
       return false;
     }
 
-    Optional<User> user = userService.findUserByUsername(username);
-    if(user.isEmpty()){
+
+    try{
+      userService.loadUserByUsername(username);
+    } catch (UsernameNotFoundException e) {
       log.warn("Да нет такого юзера!!!!: {}", username);
       return false;
     }
-    log.info("User loaded: {}", username);
 
+    log.info("User loaded: {}", username);
 
     return true;
   }

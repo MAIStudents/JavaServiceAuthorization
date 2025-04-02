@@ -1,5 +1,7 @@
 package ru.mai.lessons.rpks.security;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.mai.lessons.rpks.exception.ParseTokenException;
+import ru.mai.lessons.rpks.models.UserClaimsFromToken;
 import ru.mai.lessons.rpks.utils.TokenUtils;
 
 @Slf4j
@@ -42,7 +45,7 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
 
     if (token == null) {
       log.warn("токен пустой");
-      filterChain.doFilter(request, response);
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
@@ -52,7 +55,17 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
       return;
     }
 
-    String username = TokenUtils.getSubject(token);
+    DecodedJWT decodedJWT = JWT.decode(token);
+    UserClaimsFromToken userAllDataFromToken;
+    try{
+      userAllDataFromToken = new UserClaimsFromToken(decodedJWT);
+    } catch (IllegalArgumentException e) {
+      log.warn("date is incorrect!");
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    String username = userAllDataFromToken.subject();
     log.info("Извлечённый username из токена: {}", username);
 
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
