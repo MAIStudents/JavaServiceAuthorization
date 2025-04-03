@@ -7,10 +7,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.mai.lessons.rpks.exception.ParseTokenException;
@@ -32,6 +34,11 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+    if (isPublicEndpoint(request)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     String authHeader = getHeader(request);
 
     String token;
@@ -43,14 +50,8 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
       return;
     }
 
-    if (token == null) {
-      log.warn("токен пустой");
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      return;
-    }
-
-    if (!jwtVerifierService.verify(token)) {
-      log.warn("токен битый");
+    if (token == null || !jwtVerifierService.verify(token)) {
+      log.warn("токен битый или пустой");
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
@@ -82,5 +83,11 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
 
   private String getHeader(HttpServletRequest request) {
     return request.getHeader(TOKEN_HEADER);
+  }
+
+  private boolean isPublicEndpoint(HttpServletRequest request) {
+    return "OPTIONS".equalsIgnoreCase(request.getMethod()) ||
+            SecurityConstants.PUBLIC_ENDPOINTS.stream()
+                    .anyMatch(pattern -> new AntPathRequestMatcher(pattern).matches(request));
   }
 }

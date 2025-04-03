@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import ru.mai.lessons.rpks.security.JwtTokenFilterImpl;
+import ru.mai.lessons.rpks.security.SecurityConstants;
 
 @Configuration
 @EnableWebSecurity
@@ -37,9 +38,8 @@ public class WebSecurityConfig {
           return corsConfiguration;
         }))
         .authorizeHttpRequests(request -> request
-            .requestMatchers("/register").permitAll()
-            .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**", "/actuator/**").permitAll()
-            .anyRequest().authenticated()
+                .requestMatchers(SecurityConstants.PUBLIC_ENDPOINTS.toArray(new String[0])).permitAll()
+                .anyRequest().authenticated()
         )
             .exceptionHandling(handling -> handling
               .authenticationEntryPoint((request, response, authException) ->
