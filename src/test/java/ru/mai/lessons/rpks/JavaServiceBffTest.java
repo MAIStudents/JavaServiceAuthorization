@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -72,6 +73,15 @@ public class JavaServiceBffTest {
   public void setup() {
     RestAssured.port = port;
     userRepository.deleteAll();
+    clearCache(USER_CACHE_NAME);
+  }
+
+  private void clearCache(String cacheName) {
+    Cache userCache = cacheManager.getCache(cacheName);
+
+    if (userCache != null) {
+      userCache.clear();
+    }
   }
 
   @Container
