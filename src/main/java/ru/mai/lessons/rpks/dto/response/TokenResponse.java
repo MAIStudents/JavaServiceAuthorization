@@ -16,6 +16,5 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TokenResponse {
-
   private String token;
 }

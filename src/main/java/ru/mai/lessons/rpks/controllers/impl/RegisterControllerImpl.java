@@ -8,18 +8,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mai.lessons.rpks.controllers.RegisterController;
 import ru.mai.lessons.rpks.dto.response.TokenResponse;
+import ru.mai.lessons.rpks.services.RegisterService;
 
 @RestController
 @RequiredArgsConstructor
 public class RegisterControllerImpl implements RegisterController {
 
-  //TODO inject RegisterService...
+
+
+  private final RegisterService registerService;
 
   @Override
   @GetMapping("/register")
   @ResponseStatus(HttpStatus.OK)
   public TokenResponse register(@RequestParam("username") String username) {
-    //TODO code here...
-    return new TokenResponse();
+    return registerService.register(username);
   }
 }

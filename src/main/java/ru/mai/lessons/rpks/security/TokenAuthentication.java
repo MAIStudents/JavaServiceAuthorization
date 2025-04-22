@@ -16,7 +16,7 @@ public class TokenAuthentication implements Authentication {
 
   @Override
   public String getName() {
-    return username;
+    return username + "-" + System.currentTimeMillis();
   }
 
   @Override
@@ -48,4 +48,5 @@ public class TokenAuthentication implements Authentication {
   public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
     this.authenticated = isAuthenticated;
   }
+
 }

@@ -15,10 +15,11 @@ spring:
       max-lifetime: 2000000
       pool-name: SpringBootJPAHikariCP
   liquibase:
+    drop-first: true
     liquibase-schema: public
     default-schema: public
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: false #enable here
+    enabled: true #enable here
   jpa:
     show-sql: true
     properties:
@@ -44,6 +45,19 @@ token:
   issuer: student
   signing:
     secret: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+  lifetime: 10m
 
 server:
   port: ${APPLICATION_PORT}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,info
+  endpoint:
+    prometheus:
+      access: read_only
+    health:
+      show-details: always

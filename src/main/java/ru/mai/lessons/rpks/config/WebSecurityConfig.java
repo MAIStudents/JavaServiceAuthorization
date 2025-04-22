@@ -1,7 +1,10 @@
 package ru.mai.lessons.rpks.config;
 
 import java.util.List;
+
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,10 +15,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import ru.mai.lessons.rpks.security.JwtTokenFilterImpl;
+import ru.mai.lessons.rpks.security.SecurityConstants;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class WebSecurityConfig {
 
   private final JwtTokenFilterImpl jwtTokenFilter;
@@ -33,9 +38,14 @@ public class WebSecurityConfig {
           return corsConfiguration;
         }))
         .authorizeHttpRequests(request -> request
-            .requestMatchers("/register").permitAll()
-            .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
-            .anyRequest().authenticated())
+                .requestMatchers(SecurityConstants.PUBLIC_ENDPOINTS.toArray(new String[0])).permitAll()
+                .anyRequest().authenticated()
+        )
+            .exceptionHandling(handling -> handling
+              .authenticationEntryPoint((request, response, authException) ->
+                  response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+              )
+      )
         .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();

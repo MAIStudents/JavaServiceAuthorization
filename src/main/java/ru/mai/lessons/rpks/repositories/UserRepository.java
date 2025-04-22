@@ -7,6 +7,5 @@ import ru.mai.lessons.rpks.models.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
   Optional<User> findByUsername(String username);
 }

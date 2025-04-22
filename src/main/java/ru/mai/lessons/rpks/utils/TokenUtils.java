@@ -19,6 +19,7 @@ public class TokenUtils {
       return null;
     }
 
+
     try {
       return header.substring(TOKEN_PREFIX.length());
     } catch (Exception ex) {
