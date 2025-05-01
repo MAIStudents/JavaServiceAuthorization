@@ -10,7 +10,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(23)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -71,8 +71,8 @@ dependencies {
 	testImplementation "org.testcontainers:postgresql:1.17.6"
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	testImplementation 'io.rest-assured:rest-assured:5.3.0'
-	testCompileOnly "org.projectlombok:lombok:1.18.30"
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+	testCompileOnly "org.projectlombok:lombok:1.18.26"
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 }
 
 dependencyManagement {
