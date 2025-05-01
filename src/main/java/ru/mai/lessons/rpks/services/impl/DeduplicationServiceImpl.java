@@ -1,8 +1,8 @@
 package ru.mai.lessons.rpks.services.impl;
 
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.mai.lessons.rpks.clients.DeduplicationClient;
 import ru.mai.lessons.rpks.dto.request.DeduplicationRequest;
 import ru.mai.lessons.rpks.dto.response.DeduplicationResponse;
 import ru.mai.lessons.rpks.services.DeduplicationService;
@@ -11,38 +11,35 @@ import ru.mai.lessons.rpks.services.DeduplicationService;
 @RequiredArgsConstructor
 public class DeduplicationServiceImpl implements DeduplicationService {
 
-  //TODO use feign client...
+  private DeduplicationClient deduplicationClient;
 
   @Override
   public Iterable<DeduplicationResponse> getAllDeduplications() {
-    //TODO code here...
-    return Collections.emptyList();
+    return deduplicationClient.getAllDeduplications();
   }
 
   @Override
   public Iterable<DeduplicationResponse> getAllDeduplicationsByDeduplicationId(long id) {
-    //TODO code here...
-    return Collections.emptyList();
+    return deduplicationClient.getAllDeduplicationsByDeduplicationId(id);
   }
 
   @Override
   public DeduplicationResponse getDeduplicationById(long deduplicationId, long ruleId) {
-    //TODO code here...
-    return new DeduplicationResponse();
+    return deduplicationClient.getDeduplicationById(deduplicationId, ruleId);
   }
 
   @Override
   public void deleteDeduplication() {
-    //TODO code here...
+    deduplicationClient.deleteDeduplication();
   }
 
   @Override
   public void deleteDeduplicationById(long deduplicationId, long ruleId) {
-    //TODO code here...
+    deduplicationClient.deleteDeduplicationById(deduplicationId, ruleId);
   }
 
   @Override
   public void save(DeduplicationRequest deduplication) {
-    //TODO code here...
+    deduplicationClient.save(deduplication);
   }
 }
