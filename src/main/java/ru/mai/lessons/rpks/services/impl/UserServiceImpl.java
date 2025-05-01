@@ -1,26 +1,29 @@
 package ru.mai.lessons.rpks.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.mai.lessons.rpks.models.User;
+import ru.mai.lessons.rpks.repositories.UserRepository;
 import ru.mai.lessons.rpks.services.UserService;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  //TODO inject UserRepository...
+  private final UserRepository userRepository;
 
   @Override
   public User createUser(User user) {
-    //TODO code here...
-    return new User();
+    return userRepository.save(user);
   }
 
-  //TODO cache here...
   @Override
-  public User loadUserByUsername(String username) {
-    //TODO code here...
-    return new User();
+  @Cacheable(value = "UserCache", key = "#username")
+  public User loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository.findByUsername(username).orElseThrow(
+            () -> new UsernameNotFoundException("User with name " + username + " not found")
+    );
   }
 }

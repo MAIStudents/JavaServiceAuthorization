@@ -4,12 +4,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
 
 @Slf4j
 @Component
@@ -18,7 +19,7 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
 
   private static final String TOKEN_HEADER = "Authorization";
 
-  //TODO inject JwtVerifierService...
+  private final JwtVerifierService jwtVerifierService;
 
   @Override
   protected void doFilterInternal(
@@ -26,13 +27,28 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-    //TODO - if requestUri startsWith, then skip...
+    if (request.getRequestURI().startsWith("/swagger-ui/**")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
-    //TODO extract token...
+    String token = getToken(request);
 
-    //TODO verify token...
+    if (token == null) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
 
-    //TODO if not verify, then set status response SC_UNAUTHORIZED...
+    if (token.startsWith("Bearer ")) {
+      token = token.substring(7);
+    }
+
+    if (!jwtVerifierService.verify(token)) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    filterChain.doFilter(request, response);
   }
 
   private String getToken(HttpServletRequest request) {
