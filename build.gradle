@@ -51,7 +51,7 @@ dependencies {
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	testImplementation 'org.testng:testng:7.1.0'
+	testImplementation 'org.testng:testng:7.7.0'
 
 	// code generator
 	compileOnly 'org.projectlombok:lombok'
@@ -64,6 +64,9 @@ dependencies {
 
 	// JWT token
 	implementation 'com.auth0:java-jwt:4.2.0'
+
+	// actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	// test
 	testImplementation 'org.testcontainers:testcontainers:1.17.6'

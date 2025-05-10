@@ -1,8 +1,8 @@
 package ru.mai.lessons.rpks.services.impl;
 
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.mai.lessons.rpks.clients.EnrichmentClient;
 import ru.mai.lessons.rpks.dto.request.EnrichmentRequest;
 import ru.mai.lessons.rpks.dto.response.EnrichmentResponse;
 import ru.mai.lessons.rpks.services.EnrichmentService;
@@ -11,38 +11,35 @@ import ru.mai.lessons.rpks.services.EnrichmentService;
 @RequiredArgsConstructor
 public class EnrichmentServiceImpl implements EnrichmentService {
 
-  //TODO use feign client...
+  private final EnrichmentClient enrichmentClient;
 
   @Override
   public Iterable<EnrichmentResponse> getAllEnrichmentRequests() {
-    //TODO code here...
-    return Collections.emptyList();
+    return enrichmentClient.getAllEnrichmentRequests();
   }
 
   @Override
   public Iterable<EnrichmentResponse> getAllEnrichmentRequestsByEnrichmentRequestId(long id) {
-    //TODO code here...
-    return Collections.emptyList();
+    return enrichmentClient.getAllEnrichmentRequestsByEnrichmentRequestId(id);
   }
 
   @Override
   public EnrichmentResponse getEnrichmentRequestById(long enrichmentId, long ruleId) {
-    //TODO code here...
-    return new EnrichmentResponse();
+    return enrichmentClient.getEnrichmentRequestById(enrichmentId, ruleId);
   }
 
   @Override
   public void deleteEnrichmentRequest() {
-    //TODO code here...
+    enrichmentClient.deleteEnrichmentRequest();
   }
 
   @Override
   public void deleteEnrichmentRequestById(long enrichmentId, long ruleId) {
-    //TODO code here...
+    enrichmentClient.deleteEnrichmentRequestById(enrichmentId, ruleId);
   }
 
   @Override
   public void save(EnrichmentRequest enrichment) {
-    //TODO code here...
+    enrichmentClient.save(enrichment);
   }
 }

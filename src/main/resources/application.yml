@@ -18,7 +18,7 @@ spring:
     liquibase-schema: public
     default-schema: public
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: false #enable here
+    enabled: true
   jpa:
     show-sql: true
     properties:
@@ -42,8 +42,20 @@ feign:
 
 token:
   issuer: student
-  signing:
-    secret: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+  signingSecret: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
+  expiration-time: PT1M
+
 
 server:
   port: ${APPLICATION_PORT}
+
+
+# for actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

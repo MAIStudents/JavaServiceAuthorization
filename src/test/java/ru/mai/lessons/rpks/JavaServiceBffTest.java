@@ -70,7 +70,7 @@ public class JavaServiceBffTest {
   private CacheManager cacheManager;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     RestAssured.port = port;
     userRepository.deleteAll();
     clearCache(USER_CACHE_NAME);
