@@ -4,12 +4,16 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.mai.lessons.rpks.utils.TokenUtils;
+
+import java.io.IOException;
 
 @Slf4j
 @Component
@@ -18,7 +22,7 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
 
   private static final String TOKEN_HEADER = "Authorization";
 
-  //TODO inject JwtVerifierService...
+  private final JwtVerifierService jwtVerifierService;
 
   @Override
   protected void doFilterInternal(
@@ -26,13 +30,23 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-    //TODO - if requestUri startsWith, then skip...
-
-    //TODO extract token...
-
-    //TODO verify token...
-
-    //TODO if not verify, then set status response SC_UNAUTHORIZED...
+    final String authHeader = getToken(request);
+    final String jwtToken = TokenUtils.extractToken(authHeader);
+    if (jwtToken == null) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      filterChain.doFilter(request, response);
+      return;
+    }
+    final String username = TokenUtils.getSubject(jwtToken);
+    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+      if (jwtVerifierService.verify(jwtToken)) {
+        Authentication authToken = new TokenAuthentication(username);
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+      } else {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      }
+    }
+    filterChain.doFilter(request, response);
   }
 
   private String getToken(HttpServletRequest request) {

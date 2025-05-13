@@ -1,6 +1,9 @@
 package ru.mai.lessons.rpks.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
+import ru.mai.lessons.rpks.dto.request.EnrichmentRequest;
+import ru.mai.lessons.rpks.dto.response.EnrichmentResponse;
 
 /**
  * Клиент для контролера обогащения
@@ -10,5 +13,21 @@ import org.springframework.cloud.openfeign.FeignClient;
     url = "${feign.client.url.enrichment}"
 )
 public interface EnrichmentClient {
-  //TODO code here...
+    @GetMapping("/findAll")
+    Iterable<EnrichmentResponse> getAllEnrichments();
+
+    @GetMapping("/findAll/{id}")
+    Iterable<EnrichmentResponse> getAllEnrichmentsByEnrichmentId(@PathVariable long id);
+
+    @GetMapping("/find/{enrichmentId}/{ruleId}")
+    EnrichmentResponse getEnrichmentById(@PathVariable long enrichmentId, @PathVariable long ruleId);
+
+    @DeleteMapping("/delete")
+    void deleteEnrichment();
+
+    @DeleteMapping("/delete/{enrichmentId}/{ruleId}")
+    void deleteEnrichmentById(@PathVariable long enrichmentId, @PathVariable long ruleId);
+
+    @PostMapping("/save")
+    void save(@RequestBody EnrichmentRequest enrichment);
 }

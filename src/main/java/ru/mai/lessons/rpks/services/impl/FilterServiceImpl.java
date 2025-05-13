@@ -1,8 +1,8 @@
 package ru.mai.lessons.rpks.services.impl;
 
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.mai.lessons.rpks.clients.FilterClient;
 import ru.mai.lessons.rpks.dto.request.FilterRequest;
 import ru.mai.lessons.rpks.dto.response.FilterResponse;
 import ru.mai.lessons.rpks.services.FilterService;
@@ -11,38 +11,35 @@ import ru.mai.lessons.rpks.services.FilterService;
 @RequiredArgsConstructor
 public class FilterServiceImpl implements FilterService {
 
-  //TODO use feign client...
+  private final FilterClient filterClient;
 
   @Override
   public Iterable<FilterResponse> getAllFilters() {
-    //TODO code here...
-    return Collections.emptyList();
+    return filterClient.getAllFilters();
   }
 
   @Override
   public Iterable<FilterResponse> getAllFiltersByFilterId(long id) {
-    //TODO code here...
-    return Collections.emptyList();
+    return filterClient.getAllFiltersByFilterId(id);
   }
 
   @Override
   public FilterResponse getFilterByFilterIdAndRuleId(long filterId, long ruleId) {
-    //TODO code here...
-    return new FilterResponse();
+    return filterClient.getFilterById(filterId, ruleId);
   }
 
   @Override
   public void deleteFilter() {
-    //TODO code here...
+    filterClient.deleteFilter();
   }
 
   @Override
   public void deleteFilterById(long filterId, long ruleId) {
-    //TODO code here...
+    filterClient.deleteFilterById(filterId, ruleId);
   }
 
   @Override
   public void save(FilterRequest filter) {
-    //TODO code here...
+    filterClient.save(filter);
   }
 }
