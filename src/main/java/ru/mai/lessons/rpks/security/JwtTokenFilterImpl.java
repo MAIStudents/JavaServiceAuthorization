@@ -5,37 +5,67 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import java.util.Set;
+
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.mai.lessons.rpks.utils.TokenUtils;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenFilterImpl extends OncePerRequestFilter {
 
+  private final JwtVerifierService verifierService;
+
+  private static final Set<String> EXCLUDED_PATHS = Set.of(
+          "/register",
+          "/auth/",
+          "/something"
+  );
+
   private static final String TOKEN_HEADER = "Authorization";
 
-  //TODO inject JwtVerifierService...
 
   @Override
   protected void doFilterInternal(
-      @NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain filterChain) throws ServletException, IOException {
+          @NonNull HttpServletRequest request,
+          @NonNull HttpServletResponse response,
+          @NonNull FilterChain filterChain) throws ServletException, IOException  {
+    String path = request.getRequestURI();
 
-    //TODO - if requestUri startsWith, then skip...
+    if (EXCLUDED_PATHS.stream().anyMatch(path::startsWith)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
-    //TODO extract token...
+    String rawHeader = request.getHeader(TOKEN_HEADER);
+    String jwt = TokenUtils.extractToken(rawHeader);
 
-    //TODO verify token...
+    if (jwt == null) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "jwt is null");
+      return;
+    }
 
-    //TODO if not verify, then set status response SC_UNAUTHORIZED...
-  }
+    String user;
+    try {
+      user = verifierService.getUsername(jwt);
+    } catch (Exception ex) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+      return;
+    }
 
-  private String getToken(HttpServletRequest request) {
-    return request.getHeader(TOKEN_HEADER);
+    if (!verifierService.verify(jwt)) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is invalid");
+      return;
+    }
+
+    SecurityContextHolder.getContext().setAuthentication(new TokenAuthentication(user));
+    filterChain.doFilter(request, response);
   }
 }

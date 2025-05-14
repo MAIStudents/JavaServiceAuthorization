@@ -65,14 +65,16 @@ dependencies {
 	// JWT token
 	implementation 'com.auth0:java-jwt:4.2.0'
 
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 	// test
 	testImplementation 'org.testcontainers:testcontainers:1.17.6'
 	testImplementation "org.testcontainers:junit-jupiter:1.17.6"
 	testImplementation "org.testcontainers:postgresql:1.17.6"
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	testImplementation 'io.rest-assured:rest-assured:5.3.0'
-	testCompileOnly "org.projectlombok:lombok:1.18.26"
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+	testCompileOnly "org.projectlombok:lombok:1.18.38"
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.38'
 }
 
 dependencyManagement {

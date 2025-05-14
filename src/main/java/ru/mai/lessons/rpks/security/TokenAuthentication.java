@@ -36,7 +36,7 @@ public class TokenAuthentication implements Authentication {
 
   @Override
   public Object getPrincipal() {
-    return username;
+    return getName();
   }
 
   @Override

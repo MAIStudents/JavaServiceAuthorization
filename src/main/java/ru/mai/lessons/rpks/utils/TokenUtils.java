@@ -1,6 +1,6 @@
 package ru.mai.lessons.rpks.utils;
 
-import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import ru.mai.lessons.rpks.exception.ParseTokenException;
@@ -10,11 +10,12 @@ public class TokenUtils {
 
   private static final String TOKEN_PREFIX = "Bearer ";
 
-  public String getSubject(String token) {
-    return JWT.decode(token).getSubject();
+
+  public static String getSubject(JWTVerifier verifier, String token) {
+    return verifier.verify(token).getSubject();
   }
 
-  public String extractToken(String header) {
+  public static String extractToken(String header) {
     if (StringUtils.isBlank(header) || !header.startsWith(TOKEN_PREFIX)) {
       return null;
     }
