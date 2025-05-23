@@ -1,8 +1,6 @@
 package ru.mai.lessons.rpks.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -10,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Generated;
 
 @Getter
 @Setter
@@ -23,7 +20,7 @@ import org.hibernate.annotations.Generated;
 public class User {
 
   @Id
-  @Generated
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(name = "username", unique = true, nullable = false)
