@@ -2,6 +2,8 @@ package ru.mai.lessons.rpks.controllers.impl;
 
 import jakarta.validation.Valid;
 import java.util.Collections;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,18 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.mai.lessons.rpks.controllers.FilterController;
 import ru.mai.lessons.rpks.dto.request.FilterRequest;
 import ru.mai.lessons.rpks.dto.response.FilterResponse;
+import ru.mai.lessons.rpks.services.FilterService;
 
 @Validated
 @RestController
 @RequestMapping("/filter")
+@RequiredArgsConstructor
 public class FilterControllerImpl implements FilterController {
+
+  private final FilterService filterService;
 
   @Override
   @GetMapping("/findAll")
   @ResponseStatus(value = HttpStatus.OK)
   public Iterable<FilterResponse> getAllFilters() {
-    //TODO code here...
-    return Collections.emptyList();
+    return filterService.getAllFilters();
   }
 
   @Override
@@ -34,8 +39,7 @@ public class FilterControllerImpl implements FilterController {
   @ResponseStatus(value = HttpStatus.OK)
   public Iterable<FilterResponse> getAllFiltersByFilterId(
       @PathVariable("id") long id) {
-    //TODO code here...
-    return Collections.emptyList();
+    return filterService.getAllFiltersByFilterId(id);
   }
 
   @Override
@@ -44,15 +48,14 @@ public class FilterControllerImpl implements FilterController {
   public FilterResponse getFilterByFilterIdAndRuleId(
       @PathVariable("filterId") long filterId,
       @PathVariable("ruleId") long ruleId) {
-    //TODO code here...
-    return new FilterResponse();
+    return filterService.getFilterByFilterIdAndRuleId(filterId, ruleId);
   }
 
   @Override
   @DeleteMapping("/delete")
   @ResponseStatus(value = HttpStatus.OK)
   public void deleteFilter() {
-    //TODO code here...
+    filterService.deleteFilter();
   }
 
   @Override
@@ -61,13 +64,13 @@ public class FilterControllerImpl implements FilterController {
   public void deleteFilterById(
       @PathVariable("filterId") long filterId,
       @PathVariable("ruleId") long ruleId) {
-    //TODO code here...
+    filterService.deleteFilterById(filterId, ruleId);
   }
 
   @Override
   @PostMapping("/save")
   @ResponseStatus(value = HttpStatus.CREATED)
   public void save(@RequestBody @Valid FilterRequest filter) {
-    //TODO code here...
+    filterService.save(filter);
   }
 }
