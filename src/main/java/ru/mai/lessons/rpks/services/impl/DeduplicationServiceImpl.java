@@ -1,6 +1,5 @@
 package ru.mai.lessons.rpks.services.impl;
 
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.mai.lessons.rpks.clients.DeduplicationClient;

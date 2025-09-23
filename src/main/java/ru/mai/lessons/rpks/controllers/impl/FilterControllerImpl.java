@@ -48,17 +48,23 @@ public class FilterControllerImpl implements FilterController {
   @Override
   @DeleteMapping("/delete")
   @ResponseStatus(value = HttpStatus.OK)
-  public void deleteFilter() {}
+  public void deleteFilter() {
+    //
+  }
 
   @Override
   @DeleteMapping("/delete/{filterId}/{ruleId}")
   @ResponseStatus(value = HttpStatus.OK)
   public void deleteFilterById(
       @PathVariable("filterId") long filterId,
-      @PathVariable("ruleId") long ruleId) {}
+      @PathVariable("ruleId") long ruleId) {
+    //
+  }
 
   @Override
   @PostMapping("/save")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public void save(@RequestBody @Valid FilterRequest filter) {}
+  public void save(@RequestBody @Valid FilterRequest filter) {
+    //
+  }
 }

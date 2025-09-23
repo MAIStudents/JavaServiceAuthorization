@@ -50,7 +50,6 @@ public class JwtTokenFilterImpl extends OncePerRequestFilter {
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("User not found");
-                return;
             }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

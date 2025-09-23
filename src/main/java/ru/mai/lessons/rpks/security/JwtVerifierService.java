@@ -25,7 +25,6 @@ public class JwtVerifierService {
             verifier.verify(token);
             return true;
         } catch (JWTVerificationException e) {
-            System.err.println("JWT verification failed: " + e.getMessage());
             return false;
         }
     }

@@ -1,7 +1,5 @@
 package ru.mai.lessons.rpks.services.impl;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import ru.mai.lessons.rpks.clients.EnrichmentClient;
 import ru.mai.lessons.rpks.dto.request.EnrichmentRequest;
 import ru.mai.lessons.rpks.dto.response.EnrichmentResponse;

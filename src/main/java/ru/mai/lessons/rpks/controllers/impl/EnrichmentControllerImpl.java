@@ -3,7 +3,6 @@ package ru.mai.lessons.rpks.controllers.impl;
 import jakarta.validation.Valid;
 import java.util.Collections;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mai.lessons.rpks.clients.EnrichmentClient;
 import ru.mai.lessons.rpks.controllers.EnrichmentController;
 import ru.mai.lessons.rpks.dto.request.EnrichmentRequest;
 import ru.mai.lessons.rpks.dto.response.EnrichmentResponse;
-import ru.mai.lessons.rpks.services.EnrichmentService;
 
 @Validated
 @RestController
@@ -52,7 +49,9 @@ public class EnrichmentControllerImpl implements EnrichmentController {
   @Override
   @DeleteMapping("/delete")
   @ResponseStatus(value = HttpStatus.OK)
-  public void deleteEnrichmentRequest() {}
+  public void deleteEnrichmentRequest() {
+    //
+  }
 
   @Override
   @DeleteMapping("/delete/{enrichmentId}/{ruleId}")
@@ -60,11 +59,14 @@ public class EnrichmentControllerImpl implements EnrichmentController {
   public void deleteEnrichmentRequestById(
       @PathVariable("enrichmentId") long enrichmentId,
       @PathVariable("ruleId") long ruleId) {
+    //
   }
 
   @Override
   @PostMapping("/save")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public void save(@RequestBody @Valid EnrichmentRequest enrichment) {}
+  public void save(@RequestBody @Valid EnrichmentRequest enrichment) {
+    //
+  }
 }
 
