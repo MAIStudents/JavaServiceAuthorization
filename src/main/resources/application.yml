@@ -18,7 +18,7 @@ spring:
     liquibase-schema: public
     default-schema: public
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    enabled: false #enable here
+    enabled: true #enable here
   jpa:
     show-sql: true
     properties:
@@ -47,3 +47,9 @@ token:
 
 server:
   port: ${APPLICATION_PORT}
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"

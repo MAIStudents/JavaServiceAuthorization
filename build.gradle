@@ -29,7 +29,6 @@ ext {
 }
 
 dependencies {
-
 	// spring web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -81,6 +80,6 @@ dependencyManagement {
 	}
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
 }
