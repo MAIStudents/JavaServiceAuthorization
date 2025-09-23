@@ -25,7 +25,6 @@ public class FilterControllerImpl implements FilterController {
   @GetMapping("/findAll")
   @ResponseStatus(value = HttpStatus.OK)
   public Iterable<FilterResponse> getAllFilters() {
-    //TODO code here...
     return Collections.emptyList();
   }
 
@@ -34,7 +33,6 @@ public class FilterControllerImpl implements FilterController {
   @ResponseStatus(value = HttpStatus.OK)
   public Iterable<FilterResponse> getAllFiltersByFilterId(
       @PathVariable("id") long id) {
-    //TODO code here...
     return Collections.emptyList();
   }
 
@@ -44,30 +42,23 @@ public class FilterControllerImpl implements FilterController {
   public FilterResponse getFilterByFilterIdAndRuleId(
       @PathVariable("filterId") long filterId,
       @PathVariable("ruleId") long ruleId) {
-    //TODO code here...
     return new FilterResponse();
   }
 
   @Override
   @DeleteMapping("/delete")
   @ResponseStatus(value = HttpStatus.OK)
-  public void deleteFilter() {
-    //TODO code here...
-  }
+  public void deleteFilter() {}
 
   @Override
   @DeleteMapping("/delete/{filterId}/{ruleId}")
   @ResponseStatus(value = HttpStatus.OK)
   public void deleteFilterById(
       @PathVariable("filterId") long filterId,
-      @PathVariable("ruleId") long ruleId) {
-    //TODO code here...
-  }
+      @PathVariable("ruleId") long ruleId) {}
 
   @Override
   @PostMapping("/save")
   @ResponseStatus(value = HttpStatus.CREATED)
-  public void save(@RequestBody @Valid FilterRequest filter) {
-    //TODO code here...
-  }
+  public void save(@RequestBody @Valid FilterRequest filter) {}
 }
